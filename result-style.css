@@ -1,0 +1,99 @@
+.command-hint {
+  margin: 9px 2px 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.command-hint strong { color: var(--forest); }
+
+.final-output {
+  padding: 4px 20px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: #fff;
+}
+
+.final-output hr {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.output-section { padding: 22px 0; }
+
+.output-section h3 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.output-section blockquote {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--green);
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.translation-section blockquote {
+  font-size: clamp(22px, 5.5vw, 28px);
+  font-weight: 750;
+}
+
+.context-keyword-list {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding-left: 25px;
+}
+
+.context-keyword-list li { padding-left: 5px; line-height: 1.55; }
+.context-keyword-list strong { color: var(--forest); }
+.context-keyword-list p { margin: 7px 0 0; color: var(--muted); font-size: 15px; }
+.context-keyword-list p strong { color: var(--ink); }
+
+/* 精簡模式：主畫面只保留溝通所需操作。 */
+body { background: linear-gradient(180deg, var(--forest) 0 116px, var(--paper) 116px); }
+.app-header { padding-top: 12px; padding-bottom: 12px; gap:14px; }
+.app-header h1 { font-size: 26px; }
+.brand-block{flex:0 0 auto}.header-model,.header-language{width:calc(50% - 7px)}.header-model{display:grid;gap:4px}.header-model label{display:grid;grid-template-columns:auto minmax(100px,1fr);align-items:center;gap:8px;color:#fff;font-size:13px}.header-model select{min-height:44px;padding:7px 9px;border:1px solid rgba(255,255,255,.35);background:#fff}.header-model .model-status{color:rgba(255,255,255,.72);font-size:10px;text-align:left}.header-language{margin-left:auto;padding:8px 10px;border-radius:15px;background:#fff;color:var(--ink);box-shadow:none}.header-language .language-single{grid-template-columns:minmax(0,1fr) minmax(100px,1fr);gap:8px}.header-language select{min-height:44px;padding:8px 10px}.header-language .bilingual-title{font-size:12px;line-height:1.25}
+.eyebrow { font-size: 10px; }
+.app-shell { padding-inline: 12px; }
+.card { border-radius: 18px; padding: 16px; margin-bottom: 10px; }
+.language-card { padding: 12px; }
+.language-single { display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,42%);align-items:center;gap:12px }.language-single select{min-height:50px}.bilingual-title small{display:inline;margin:0;color:var(--muted);font-size:.64em;font-weight:650;line-height:1.3}.language-card .bilingual-title small{font-size:11px}.auto-badge{display:inline-block;margin-right:5px;padding:3px 7px;border-radius:999px;background:#e5eee9;color:var(--forest);font-size:11px;font-weight:800}.panel-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title-row .simple-heading{flex:1}.inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mini-action{width:100%;min-height:48px;border:0;border-radius:11px;padding:8px 10px;font:800 15px inherit}.mini-action.confirm{background:var(--lime);color:var(--forest)}.mini-action.redo{background:#e7ece9;color:var(--forest)}.keywords-section{border-top:1px solid var(--line)}.keywords-section>h3{margin-bottom:16px;font-size:20px}
+.language-grid { grid-template-columns: minmax(0, 1fr) 46px minmax(0, 1fr); }
+.language-grid select, .swap-btn { min-height: 48px; height: 48px; }
+.language-grid label { font-size: 12px; }
+.status-banner{margin:8px 2px;padding:9px 12px;font-size:13px}
+.simple-heading { margin-bottom: 14px; }
+.communication-card{display:grid;gap:0}.analysis-section{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.embedded-result{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}#textInput{min-height:52px;max-height:160px;overflow-y:hidden;resize:none}
+.simple-heading h2, .result-heading { margin: 0 0 3px; font-size: 20px; }
+.simple-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+.input-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mic-btn,.submit-btn{min-height:56px;border-radius:14px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:9px;font-size:15px;box-shadow:none}.mic-btn svg,.submit-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.submit-btn{width:100%}
+.divider { margin: 13px 0; }
+.command-help { margin: 8px 2px 12px; color: var(--muted); font-size: 12px; }
+.compact-hidden { display: none; }
+.preview-badge { padding: 7px 11px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; color: #fff; font-size: 12px; font-weight: 800; }
+.permission-help { margin: 10px 0 12px; padding: 13px; border-left: 4px solid var(--red); border-radius: 10px; background: #fff0ee; color: var(--ink); font-size: 14px; line-height: 1.55; }
+.permission-help p { margin: 5px 0 0; }
+.history-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}.history-heading h2{margin:0;font-size:20px}.history-heading button{min-width:56px;min-height:44px;border:0;border-radius:11px;background:#e7ece9;color:var(--forest);font:800 14px inherit}.history-list{display:grid}.history-entry{padding:15px 0;border-top:1px solid var(--line);line-height:1.55}.history-entry:first-child{border-top:0}.history-original{margin:0;font-size:17px;font-weight:750}.history-translation{margin:5px 0 0;color:var(--muted);font-size:16px}
+#analysisPanel .result-block { padding: 13px 0; }
+#analysisPanel .result-block:first-of-type { border-top: 0; }
+.final-output { border: 0; padding: 0; }
+.output-section { padding: 20px 0; }
+.output-placeholder{color:var(--muted)!important;font-size:16px!important;font-weight:600!important}
+.result-heading { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+
+@media (max-width: 380px) {
+  .language-grid { grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); gap: 5px; }
+  select { padding-inline: 8px; }
+  .app-header{align-items:center;padding-inline:12px}.eyebrow{font-size:8px;letter-spacing:.08em}.header-model,.header-language{width:calc(50% - 4px)}.header-model{gap:2px}.header-model label{grid-template-columns:1fr;gap:2px;font-size:10px}.header-model select{min-height:44px;font-size:14px}.header-model .model-status{display:none}.header-language{padding:7px}.header-language .language-single{grid-template-columns:1fr}.header-language .bilingual-title{font-size:10px}.header-language .bilingual-title small{display:none}.header-language select{min-height:44px;font-size:14px}.panel-title-row{display:block}
+  .input-actions{gap:8px}.mic-btn,.submit-btn{padding-inline:8px;font-size:14px}
+  .analysis-section,.embedded-result{margin-top:12px;padding-top:12px}.output-section{padding:12px 0}.translation-section blockquote{font-size:20px}.communication-card{padding:14px}
+}
+
+/* UI 設計階段不顯示正式版不需要的開發提示。 */
+.development-only{display:none!important}
