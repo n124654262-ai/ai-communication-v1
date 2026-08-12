@@ -1,4 +1,4 @@
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const MAX_TEXT_LENGTH = 2000;
 const WINDOW_MS = 60_000;
 const requestWindows = new Map();
@@ -126,6 +126,10 @@ function validateBody(body) {
 }
 
 function getGeminiText(data) {
+  const candidateText = data?.candidates?.[0]?.content?.parts
+    ?.map(part => part?.text || "")
+    .join("");
+  if (candidateText) return candidateText;
   if (typeof data.output_text === "string") return data.output_text;
   for (const output of data.outputs || []) {
     if (typeof output.text === "string") return output.text;
@@ -158,19 +162,24 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
       method: "POST",
       headers: {
         "x-goog-api-key": process.env.GEMINI_API_KEY,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: MODEL,
-        input: `${SYSTEM_PROMPT}\n\n目前任務：\n${JSON.stringify(task)}`,
-        response_format: {
-          type: "text",
-          mime_type: "application/json",
-          schema
+        system_instruction: {
+          parts: [{text: SYSTEM_PROMPT}]
+        },
+        contents: [{
+          role: "user",
+          parts: [{text: `目前任務：\n${JSON.stringify(task)}`}]
+        }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: schema,
+          temperature: 0.1
         }
       })
     });
