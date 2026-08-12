@@ -178,7 +178,6 @@ module.exports = async function handler(req, res) {
         }],
         generationConfig: {
           responseMimeType: "application/json",
-          responseSchema: schema,
           temperature: 0.1
         }
       })

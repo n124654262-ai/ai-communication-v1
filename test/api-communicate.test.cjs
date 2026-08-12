@@ -54,6 +54,7 @@ test("有效分析請求只回傳結構化結果", async () => {
     assert.equal(options.headers["x-goog-api-key"], "test-key");
     assert.equal(requestBody.generationConfig.responseMimeType, "application/json");
     assert.equal(requestBody.generationConfig.temperature, 0.1);
+    assert.equal(requestBody.generationConfig.responseSchema, undefined);
     return new Response(JSON.stringify({
       candidates: [{content: {parts: [{text: JSON.stringify(expected)}]}}]
     }), {
