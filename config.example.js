@@ -1,4 +1,4 @@
 window.APP_CONFIG = {
-  defaultProvider: "gpt",
+  defaultProvider: "gemini",
   apiBaseUrl: ""
 };

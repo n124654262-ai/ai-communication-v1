@@ -1,12 +1,12 @@
 # AI 雙向溝通機 V1
 
-目前已完成手機介面、語音輸入、確認原意、翻譯結果、重點用詞、雙語溝通紀錄，以及安全 GPT 後端程式。
+目前已完成手機介面、語音輸入、確認原意、翻譯結果、重點用詞、雙語溝通紀錄，以及安全 Gemini 後端程式。
 
 ## 目前狀態
 
-- 尚未在部署平台填入 OpenAI API Key，因此目前仍會使用模擬資料。
-- API Key 只允許放在後端环境變數 `OPENAI_API_KEY`，前端與公開程式碼均不保存金鑰。
-- `api/communicate.js` 使用 OpenAI Responses API 與結構化輸出，並限制來源網站、文字長度與基本請求頻率。
+- 尚未在部署平台填入公司 Gemini API Key，因此目前仍會使用模擬資料。
+- API Key 只允許放在後端環境變數 `GEMINI_API_KEY`，前端與公開程式碼均不保存金鑰。
+- `api/communicate.js` 使用 Google Gemini API 與結構化輸出，並限制來源網站、文字長度與基本請求頻率。
 - 溝通紀錄只保留在目前頁面，重新整理後清除，也不會作為下一句的 AI 上下文。
 
 ## 本機測試
@@ -37,18 +37,18 @@ python -m http.server 8080
 
 ## 已知限制
 
-- 未部署安全後端及設定 API Key 前，仍不是實際 GPT 翻譯。
+- 未部署安全後端及設定 API Key 前，仍不是實際 Gemini 翻譯。
 - 瀏覽器語音辨識能力依 Android Chrome 與裝置服務而異。
 - 若拒絕麥克風權限，頁面會提示重新授權，且仍可使用文字輸入。
-- 公開測試期間仍須在 OpenAI 專案設定用量預算；程式內的基本頻率限制不能取代正式的雲端防濫用服務。
+- 公開測試期間仍須在公司 Google Cloud 專案設定用量與預算；程式內的基本頻率限制不能取代正式的雲端防濫用服務。
 
-## 安全 GPT 後端
+## 安全 Gemini 後端
 
-後端預設使用 `gpt-5-mini`。部署時必須在後端平台設定：
+後端預設使用 `gemini-3.6-flash`。部署時必須在後端平台設定：
 
-- `OPENAI_API_KEY`：OpenAI Platform 建立的秘密金鑰。
+- `GEMINI_API_KEY`：公司 Google AI Studio 建立的秘密金鑰。
 - `ALLOWED_ORIGINS`：允許呼叫後端的完整 GitHub Pages 網址，多個網址以逗號分隔。
-- `OPENAI_MODEL`：可選，預設 `gpt-5-mini`。
+- `GEMINI_MODEL`：可選，預設 `gemini-3.6-flash`。
 - `MAX_REQUESTS_PER_MINUTE`：可選，預設每個來源位置每分鐘 10 次。
 
 部署後只需把 `config.js` 的 `apiBaseUrl` 改成後端完整網址，例如 `https://你的後端網址/api/communicate`。不要把 API Key 寫進 `config.js`。

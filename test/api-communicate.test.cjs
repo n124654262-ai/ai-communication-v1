@@ -25,19 +25,19 @@ function createRequest(body, overrides = {}) {
 }
 
 test("沒有後端 API Key 時拒絕呼叫", async () => {
-  const savedKey = process.env.OPENAI_API_KEY;
-  delete process.env.OPENAI_API_KEY;
+  const savedKey = process.env.GEMINI_API_KEY;
+  delete process.env.GEMINI_API_KEY;
   const res = createResponse();
   await handler(createRequest({}), res);
   assert.equal(res.statusCode, 503);
-  assert.equal(res.body.error, "AI 服務尚未完成安全設定");
-  if (savedKey) process.env.OPENAI_API_KEY = savedKey;
+  assert.equal(res.body.error, "Gemini 尚未完成安全設定");
+  if (savedKey) process.env.GEMINI_API_KEY = savedKey;
 });
 
 test("有效分析請求只回傳結構化結果", async () => {
-  const savedKey = process.env.OPENAI_API_KEY;
+  const savedKey = process.env.GEMINI_API_KEY;
   const savedFetch = global.fetch;
-  process.env.OPENAI_API_KEY = "test-key";
+  process.env.GEMINI_API_KEY = "test-key";
   const expected = {
     detectedLanguage: "zh-TW",
     originalText: "今天要加班嗎？",
@@ -48,11 +48,12 @@ test("有效分析請求只回傳結構化結果", async () => {
     uncertainParts: [],
     keywords: [{original: "加班", meaning: "超過正常工時工作", role: "工作安排"}]
   };
-  global.fetch = async (_url, options) => {
+  global.fetch = async (url, options) => {
     const requestBody = JSON.parse(options.body);
-    assert.equal(requestBody.model, "gpt-5-mini");
-    assert.equal(requestBody.store, false);
-    assert.equal(requestBody.text.format.type, "json_schema");
+    assert.equal(url, "https://generativelanguage.googleapis.com/v1beta/interactions");
+    assert.equal(options.headers["x-goog-api-key"], "test-key");
+    assert.equal(requestBody.model, "gemini-3.6-flash");
+    assert.equal(requestBody.response_format.mime_type, "application/json");
     return new Response(JSON.stringify({output_text: JSON.stringify(expected)}), {
       status: 200,
       headers: {"Content-Type": "application/json"}
@@ -70,6 +71,6 @@ test("有效分析請求只回傳結構化結果", async () => {
   assert.deepEqual(res.body, expected);
 
   global.fetch = savedFetch;
-  if (savedKey) process.env.OPENAI_API_KEY = savedKey;
-  else delete process.env.OPENAI_API_KEY;
+  if (savedKey) process.env.GEMINI_API_KEY = savedKey;
+  else delete process.env.GEMINI_API_KEY;
 });

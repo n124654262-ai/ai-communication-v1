@@ -64,8 +64,8 @@ function scrollToPanel(){/* intentionally disabled */}
 
 function init(){
   Object.entries(LANGUAGES).forEach(([value,{name}])=>{ui.sourceLanguage.add(new Option(name,value));ui.targetLanguage.add(new Option(name,value));});
-  ui.sourceLanguage.value="zh-TW";ui.targetLanguage.value="vi";ui.provider.value=runtimeConfig.defaultProvider || "gpt";
-  ui.provider.options[0].textContent=runtimeConfig.apiBaseUrl?"GPT AI":"GPT 模擬";
+  ui.sourceLanguage.value="zh-TW";ui.targetLanguage.value="vi";ui.provider.value=runtimeConfig.defaultProvider || "gemini";
+  ui.provider.options[0].textContent=runtimeConfig.apiBaseUrl?"Google Gemini":"Gemini 測試介面";
   updateLocalizedLabels();setupSpeechRecognition();bindEvents();
 }
 function updateLocalizedLabels(){const labels=UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi;$("languageLocalized").textContent=labels.language;$("startLocalized").textContent=labels.start;$("intentLocalized").textContent=labels.intent;$("confirmLocalized").textContent=labels.confirmHint;$("translationLocalized").textContent=labels.translation;$("keywordsLocalized").textContent=labels.keywords;if(!ui.micBtn.classList.contains("recording"))ui.micLabel.textContent=labels.mic;}
@@ -73,7 +73,7 @@ function updateLocalizedLabels(){const labels=UI_LABELS[ui.targetLanguage.value]
 function bindEvents(){
   $("swapLanguages").onclick=()=>{};
   ui.targetLanguage.onchange=()=>{ui.sourceLanguage.value=ui.targetLanguage.value==="zh-TW"?"vi":"zh-TW";updateLocalizedLabels();setupSpeechRecognition();};
-  ui.provider.onchange=()=>setStatus(ui.provider.value==="gpt"?(runtimeConfig.apiBaseUrl?"GPT AI 已連線":"GPT 模擬｜尚未連接 AI API"):"Gemini 已暫停｜目前使用模擬流程");
+  ui.provider.onchange=()=>setStatus(runtimeConfig.apiBaseUrl?"Google Gemini 已連線":"Gemini 尚未連接安全後端");
   ui.textInput.addEventListener("input",autoResizeTextInput);
   ui.micBtn.onclick=toggleRecording;
   $("submitTextBtn").onclick=()=>acceptOriginal(ui.textInput.value);
@@ -125,7 +125,7 @@ async function analyzeAndTranslate({provider,sourceLanguage,targetLanguage,origi
   const adapter=providers[provider];if(!adapter)throw new Error("不支援所選 AI 模型");
   return adapter({sourceLanguage,targetLanguage,originalText,phase,analysis});
 }
-const providers={gpt:payload=>proxyProvider("gpt",payload),gemini:payload=>proxyProvider("gemini",payload)};
+const providers={gemini:payload=>proxyProvider("gemini",payload)};
 async function proxyProvider(provider,payload){
   if(!runtimeConfig.apiBaseUrl)return demoProvider(payload);
   const response=await fetch(runtimeConfig.apiBaseUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({provider,...payload})});
