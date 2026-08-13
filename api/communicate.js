@@ -181,11 +181,18 @@ module.exports = async function handler(req, res) {
     const retryableStatus = new Set([429, 500, 502, 503, 504]);
     let response;
     let data;
-    for (let attempt = 0; attempt < 3; attempt += 1) {
-      response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, requestOptions);
-      data = await response.json();
-      if (response.ok || !retryableStatus.has(response.status) || attempt === 2) break;
-      await new Promise(resolve => setTimeout(resolve, 600 * (2 ** attempt)));
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+          ...requestOptions,
+          signal: AbortSignal.timeout(12_000)
+        });
+        data = await response.json();
+        if (response.ok || !retryableStatus.has(response.status) || attempt === 1) break;
+      } catch (error) {
+        if (attempt === 1) throw error;
+      }
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     if (!response.ok) {
