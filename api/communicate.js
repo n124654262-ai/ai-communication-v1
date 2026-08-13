@@ -162,7 +162,7 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, {
+    const requestOptions = {
       method: "POST",
       headers: {
         "x-goog-api-key": process.env.GEMINI_API_KEY,
@@ -175,13 +175,19 @@ module.exports = async function handler(req, res) {
             text: `${SYSTEM_PROMPT}\n\n目前任務：\n${JSON.stringify(task)}\n\n輸出必須符合以下 JSON Schema，且只能回傳純 JSON：\n${JSON.stringify(schema)}`
           }]
         }],
-        generationConfig: {
-          temperature: 0.1
-        }
+        generationConfig: {temperature: 0.1}
       })
-    });
+    };
+    const retryableStatus = new Set([429, 500, 502, 503, 504]);
+    let response;
+    let data;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`, requestOptions);
+      data = await response.json();
+      if (response.ok || !retryableStatus.has(response.status) || attempt === 2) break;
+      await new Promise(resolve => setTimeout(resolve, 600 * (2 ** attempt)));
+    }
 
-    const data = await response.json();
     if (!response.ok) {
       console.error("Gemini request failed", response.status, data?.error?.status);
       return res.status(502).json({error: "Gemini 暫時無法處理，請稍後再試"});
@@ -201,3 +207,4 @@ module.exports = async function handler(req, res) {
     return res.status(502).json({error: "Gemini 連線失敗，請稍後再試"});
   }
 };
+
