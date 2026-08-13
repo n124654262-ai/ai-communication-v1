@@ -1,4 +1,4 @@
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 const MAX_TEXT_LENGTH = 2000;
 const WINDOW_MS = 60_000;
 const requestWindows = new Map();
@@ -174,8 +174,7 @@ module.exports = async function handler(req, res) {
           parts: [{
             text: `${SYSTEM_PROMPT}\n\n目前任務：\n${JSON.stringify(task)}\n\n輸出必須符合以下 JSON Schema，且只能回傳純 JSON：\n${JSON.stringify(schema)}`
           }]
-        }],
-        generationConfig: {temperature: 0.1}
+        }]
       })
     };
     const retryableStatus = new Set([429, 500, 502, 503, 504]);

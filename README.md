@@ -44,11 +44,12 @@ python -m http.server 8080
 
 ## 安全 Gemini 後端
 
-後端預設使用 `gemini-3.6-flash`。部署時必須在後端平台設定：
+後端預設使用 `gemini-3.5-flash-lite`。部署時必須在後端平台設定：
 
 - `GEMINI_API_KEY`：公司 Google AI Studio 建立的秘密金鑰。
 - `ALLOWED_ORIGINS`：允許呼叫後端的完整 GitHub Pages 網址，多個網址以逗號分隔。
-- `GEMINI_MODEL`：可選，預設 `gemini-3.6-flash`。
+- `GEMINI_MODEL`：可選，預設 `gemini-3.5-flash-lite`。
 - `MAX_REQUESTS_PER_MINUTE`：可選，預設每個來源位置每分鐘 10 次。
 
 部署後只需把 `config.js` 的 `apiBaseUrl` 改成後端完整網址，例如 `https://你的後端網址/api/communicate`。不要把 API Key 寫進 `config.js`。
+

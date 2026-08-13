@@ -50,9 +50,9 @@ test("有效分析請求只回傳結構化結果", async () => {
   };
   global.fetch = async (url, options) => {
     const requestBody = JSON.parse(options.body);
-    assert.equal(url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent");
+    assert.equal(url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent");
     assert.equal(options.headers["x-goog-api-key"], "test-key");
-    assert.equal(requestBody.generationConfig.temperature, 0.1);
+    assert.equal(requestBody.generationConfig, undefined);
     assert.match(requestBody.contents[0].parts[0].text, /JSON Schema/);
     return new Response(JSON.stringify({
       candidates: [{content: {parts: [{text: JSON.stringify(expected)}]}}]
@@ -76,3 +76,4 @@ test("有效分析請求只回傳結構化結果", async () => {
   if (savedKey) process.env.GEMINI_API_KEY = savedKey;
   else delete process.env.GEMINI_API_KEY;
 });
+

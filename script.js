@@ -51,6 +51,7 @@ let eventState = createEmptyEvent();
 let recognition = null;
 let isRecording = false;
 let speechBuffer = "";
+let speechConfidence = null;
 let silenceTimer = null;
 let runtimeConfig = {...(window.APP_CONFIG || {})};
 
@@ -65,7 +66,7 @@ function scrollToPanel(){/* intentionally disabled */}
 function init(){
   Object.entries(LANGUAGES).forEach(([value,{name}])=>{ui.sourceLanguage.add(new Option(name,value));ui.targetLanguage.add(new Option(name,value));});
   ui.sourceLanguage.value="zh-TW";ui.targetLanguage.value="vi";ui.provider.value=runtimeConfig.defaultProvider || "gemini";
-  ui.provider.options[0].textContent=runtimeConfig.apiBaseUrl?"Google Gemini":"Gemini 測試介面";
+  ui.provider.options[0].textContent=runtimeConfig.apiBaseUrl?"Gemini 3.5 Flash-Lite":"Gemini 測試介面";
   updateLocalizedLabels();setupSpeechRecognition();bindEvents();
 }
 function updateLocalizedLabels(){const labels=UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi;$("languageLocalized").textContent=labels.language;$("startLocalized").textContent=labels.start;$("intentLocalized").textContent=labels.intent;$("confirmLocalized").textContent=labels.confirmHint;$("translationLocalized").textContent=labels.translation;$("keywordsLocalized").textContent=labels.keywords;if(!ui.micBtn.classList.contains("recording"))ui.micLabel.textContent=labels.mic;}
@@ -88,15 +89,15 @@ function setupSpeechRecognition(){
   if(!SpeechRecognition){ui.micBtn.disabled=true;return;}
   recognition=new SpeechRecognition();recognition.lang=navigator.language||LANGUAGES[ui.sourceLanguage.value].speech;recognition.interimResults=true;recognition.continuous=true;
   recognition.onstart=()=>{ui.micBtn.classList.add("recording");ui.micLabel.textContent=(UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi).listening;setStatus("正在錄音；停頓不會停止，連續安靜 10 秒會自動結束。");};
-  recognition.onresult=e=>{let interim="";let heardSpeech=false;for(let i=e.resultIndex;i<e.results.length;i++){const part=e.results[i][0].transcript;if(part.trim())heardSpeech=true;if(e.results[i].isFinal)speechBuffer+=`${part} `;else interim+=part;}const combined=`${speechBuffer}${interim}`.trim();ui.textInput.value=combined;autoResizeTextInput();if(heardSpeech)scheduleSilenceStop();};
+  recognition.onresult=e=>{let interim="";let heardSpeech=false;for(let i=e.resultIndex;i<e.results.length;i++){const alternative=e.results[i][0];const part=alternative.transcript;if(part.trim())heardSpeech=true;if(Number.isFinite(alternative.confidence)&&alternative.confidence>0)speechConfidence=alternative.confidence;if(e.results[i].isFinal)speechBuffer+=`${part} `;else interim+=part;}const combined=`${speechBuffer}${interim}`.trim();ui.textInput.value=combined;autoResizeTextInput();if(heardSpeech)scheduleSilenceStop();};
   recognition.onerror=e=>{if(e.error==="no-speech"&&isRecording)return;const denied=e.error==="not-allowed"||e.error==="service-not-allowed";isRecording=false;clearSilenceTimer();show(ui.permissionHelp,denied);setStatus(denied?"麥克風權限被拒絕，請依提示開啟權限，或改用文字輸入。":`語音辨識失敗（${e.error}），請改用文字輸入。`,true);finishRecordingUi();};
   recognition.onend=()=>{if(isRecording){setTimeout(()=>{try{recognition.start();}catch{}},150);}else finishRecordingUi();};ui.micBtn.disabled=false;
 }
 function toggleRecording(){if(isRecording)finishAndConvertRecording();else startRecording();}
-function startRecording(){speechBuffer="";ui.textInput.value="";autoResizeTextInput();isRecording=true;scheduleSilenceStop();try{recognition?.start();}catch{isRecording=false;clearSilenceTimer();setStatus("錄音尚未結束，請稍候再試。",true);}}
+function startRecording(){speechBuffer="";speechConfidence=null;ui.textInput.value="";autoResizeTextInput();isRecording=true;scheduleSilenceStop();try{recognition?.start();}catch{isRecording=false;clearSilenceTimer();setStatus("錄音尚未結束，請稍候再試。",true);}}
 function scheduleSilenceStop(){clearSilenceTimer();silenceTimer=setTimeout(finishAndConvertRecording,10000);}
 function clearSilenceTimer(){if(silenceTimer){clearTimeout(silenceTimer);silenceTimer=null;}}
-function finishAndConvertRecording(){if(!isRecording)return;isRecording=false;clearSilenceTimer();try{recognition?.stop();}catch{}const text=ui.textInput.value.trim();finishRecordingUi();if(text)acceptOriginal(text);else setStatus("沒有辨識到文字，請重新錄音或直接輸入。",true);}
+function finishAndConvertRecording(){if(!isRecording)return;isRecording=false;clearSilenceTimer();try{recognition?.stop();}catch{}const rawTranscript=ui.textInput.value.trim();finishRecordingUi();if(!rawTranscript){setStatus("沒有辨識到文字，請重新錄音或直接輸入。",true);return;}if(!window.VoiceCore){setStatus("Voice Core 未載入，請重新整理頁面。",true);return;}const result=window.VoiceCore.fromTranscript({source:{type:"transcript",transcript:rawTranscript},raw_transcript:rawTranscript,language:"auto",mode:"clean",confidence:speechConfidence,speech_engine:"browser-web-speech",dictionary:{entries:[]}});if(result.status==="error"){setStatus(`Voice Core 轉文字失敗：${result.error?.message||"未知錯誤"}`,true);return;}ui.textInput.value=result.text;autoResizeTextInput();setStatus(result.status==="needs_review"?"Voice Core 已產出文字，辨識信心偏低，請先確認。":"Voice Core 已產出文字，正在交給 Gemini 理解原意。");acceptOriginal(result.text);}
 function finishRecordingUi(){ui.micBtn.classList.remove("recording");ui.micLabel.textContent=(UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi).mic;}
 function parseDirectionCommand(text){
   const rules={"*中越":["zh-TW","vi"],"*越中":["vi","zh-TW"],"*中英":["zh-TW","en"],"*英中":["en","zh-TW"]};
@@ -166,3 +167,4 @@ function editOriginal(){show(ui.analysisPanel,false);show(ui.originalPanel,false
 function resetCurrentInput(){eventState=createEmptyEvent();ui.textInput.value="";autoResizeTextInput();ui.originalText.value="";show(ui.inputPanel);show(ui.originalPanel,false);show(ui.analysisPanel,false);resetTranslationPanel();setStatus("請重新說話或輸入文字。");scrollToPanel(ui.inputPanel);}
 function resetAll(){resetCurrentInput();setStatus("上一個事件已完全清除，可以開始下一次溝通。");}
 init();
+
