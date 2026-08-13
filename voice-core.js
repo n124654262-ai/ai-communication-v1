@@ -14,6 +14,25 @@
     return text;
   }
 
+  // Android Chrome 重新啟動連續辨識時，可能再次回傳整段舊逐字稿。
+  // 只合併真正新增的部分，避免同一句被重複累加；使用者原本說的重複詞仍保留。
+  function mergeTranscriptSegments(existingValue, incomingValue) {
+    const existing = String(existingValue || "").trim();
+    const incoming = String(incomingValue || "").trim();
+    if (!existing) return incoming;
+    if (!incoming || existing === incoming) return existing;
+    if (incoming.startsWith(existing)) return incoming;
+    if (existing.startsWith(incoming) || existing.endsWith(incoming)) return existing;
+
+    const maxOverlap = Math.min(existing.length, incoming.length);
+    for (let size = maxOverlap; size >= 3; size -= 1) {
+      if (existing.slice(-size) === incoming.slice(0, size)) {
+        return `${existing}${incoming.slice(size)}`;
+      }
+    }
+    return `${existing} ${incoming}`;
+  }
+
   function applyDictionary(text, entries, language) {
     const hits = [];
     const warnings = [];
@@ -78,6 +97,6 @@
     };
   }
 
-  return Object.freeze({fromTranscript});
+  return Object.freeze({fromTranscript, mergeTranscriptSegments});
 });
 

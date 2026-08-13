@@ -28,3 +28,15 @@ test("Voice Core 拒絕空白逐字稿", () => {
   assert.equal(result.error.code, "INVALID_INPUT");
 });
 
+test("Android Chrome 重送累積逐字稿時不會重複加入", () => {
+  let transcript = VoiceCore.mergeTranscriptSegments("", "測試測試");
+  transcript = VoiceCore.mergeTranscriptSegments(transcript, "測試測試 現在語音測試");
+  transcript = VoiceCore.mergeTranscriptSegments(transcript, "測試測試 現在語音測試");
+  assert.equal(transcript, "測試測試 現在語音測試");
+});
+
+test("使用者真的說重複詞時仍完整保留", () => {
+  const transcript = VoiceCore.mergeTranscriptSegments("測試測試", "現在語音測試");
+  assert.equal(transcript, "測試測試 現在語音測試");
+});
+
