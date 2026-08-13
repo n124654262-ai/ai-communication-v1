@@ -1,4 +1,4 @@
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 const MAX_TEXT_LENGTH = 2000;
 const WINDOW_MS = 60_000;
 const requestWindows = new Map();
@@ -177,7 +177,12 @@ module.exports = async function handler(req, res) {
           parts: [{text: `目前任務：\n${JSON.stringify(task)}`}]
         }],
         generationConfig: {
-          responseMimeType: "application/json",
+          responseFormat: {
+            text: {
+              mimeType: "application/json",
+              schema
+            }
+          },
           temperature: 0.1
         }
       })
