@@ -54,6 +54,7 @@ test("有效分析請求只回傳結構化結果", async () => {
     assert.equal(options.headers["x-goog-api-key"], "test-key");
     assert.equal(requestBody.generationConfig, undefined);
     assert.match(requestBody.contents[0].parts[0].text, /JSON Schema/);
+    assert.match(requestBody.contents[0].parts[0].text, /不得改寫成第三人稱解說/);
     return new Response(JSON.stringify({
       candidates: [{content: {parts: [{text: JSON.stringify(expected)}]}}]
     }), {

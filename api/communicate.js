@@ -7,7 +7,7 @@ const SYSTEM_PROMPT = `你是一位精通繁體中文、越南文與英文的專
 規則：
 1. 每筆輸入都是獨立任務，不使用先前對話。
 2. 忠實保留命令、提醒、詢問、緊急或客氣程度，不擅自增減語意。
-3. understoodMeaning 只顯示說話者原意，不要加「已收到」、模型名稱或解釋。
+3. understoodMeaning 只能輸出整理後的原句：保持原語言、原本說話方式與語氣，只修正明顯的語音辨識錯字、贅詞、重複和標點。不得改寫成第三人稱解說，不得加入「說話者正在」、「意思是」、「用途是」、「沒有實質意義」、已收到、模型名稱、判斷、摘要或原文沒有的資訊。
 4. 使用母語者常用的職場白話，避免生硬書面語。
 5. analyze 階段只分析原意、語氣、不確定處與關鍵詞，不產生翻譯。
 6. translate 階段依已確認原意產生翻譯、反向翻譯及 1 到 5 個重點詞。
@@ -40,7 +40,7 @@ const translatedKeywordSchema = {
 const analysisProperties = {
   detectedLanguage: {type: "string", enum: ["zh-TW", "vi", "en"]},
   originalText: {type: "string"},
-  understoodMeaning: {type: "string"},
+  understoodMeaning: {type: "string", description: "原語言的整理後原句，只能是說話內容本身，不得解說、摘要或推測用途"},
   mainIntent: {type: "string"},
   tone: {type: "string"},
   confidence: {type: "number", minimum: 0, maximum: 1},

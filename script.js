@@ -11,7 +11,7 @@ const SYSTEM_PROMPT = `你是一位精通繁體中文、越南文與英文的專
 4. 使用道地、母語者常用的職場白話，避免生硬書面語或過時字典定義。
 5. 忠實保留原文態度與強度，包括命令、緊急提醒、客氣詢問、質疑、指責與否定。
 6. 不得增加原文沒有的禮貌詞、客套話、理由、解釋或資訊；不得美化、弱化或加重語氣。
-7. analyze 階段先用原語言說明理解，不得產生正式譯文。
+7. analyze 階段的 understoodMeaning 只能輸出原語言的整理後原句；保留原本說話方式與語氣，只修正明顯辨識錯字、贅詞、重複及標點。不得使用第三人稱解說、摘要、推測用途或加入原文沒有的資訊，也不得產生正式譯文。
 8. translate 階段輸出自然譯文、將譯文翻回原語言的 backTranslation，以及關鍵詞語境釋義。
 9. 每個關鍵詞說明限 30 個中文字或相當長度，不得輸出無意義客套話。
 10. 不確定時明確列入 uncertainParts，不得猜測。
@@ -26,7 +26,7 @@ const RESPONSE_SCHEMAS = {
     type: "object",
     required: ["detectedLanguage", "originalText", "understoodMeaning", "mainIntent", "tone", "confidence", "uncertainParts", "keywords"],
     properties: {
-      detectedLanguage: {type: "string"}, originalText: {type: "string"}, understoodMeaning: {type: "string"},
+      detectedLanguage: {type: "string"}, originalText: {type: "string"}, understoodMeaning: {type: "string", description: "原語言的整理後原句，不得解說、摘要或推測用途"},
       mainIntent: {type: "string"}, tone: {type: "string"}, confidence: {type: "number", minimum: 0, maximum: 1},
       uncertainParts: {type: "array", items: {type: "string"}},
       keywords: {type: "array", items: {type: "object", required: ["original", "meaning", "role"], properties: {original: {type: "string"}, meaning: {type: "string"}, role: {type: "string"}}}}
