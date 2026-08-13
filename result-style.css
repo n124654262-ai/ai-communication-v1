@@ -83,7 +83,7 @@ body { background: linear-gradient(180deg, var(--forest) 0 116px, var(--paper) 1
 #analysisPanel .result-block { padding: 13px 0; }
 #analysisPanel .result-block:first-of-type { border-top: 0; }
 #analysisPanel .tone-result { padding-top: 6px; padding-bottom: 6px; }
-.history-ai-translation{margin:0;font-size:17px;font-weight:750;line-height:1.5}
+.history-entry{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px}.history-recognized,.history-ai-translation{margin:0;font-size:17px;font-weight:750;line-height:1.5;overflow-wrap:anywhere}.history-arrow{color:var(--muted);font-weight:900}
 .final-output { border: 0; padding: 0; }
 .output-section { padding: 20px 0; }
 .output-placeholder{color:var(--muted)!important;font-size:16px!important;font-weight:600!important}
