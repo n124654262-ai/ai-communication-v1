@@ -169,20 +169,13 @@ module.exports = async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        system_instruction: {
-          parts: [{text: SYSTEM_PROMPT}]
-        },
         contents: [{
           role: "user",
-          parts: [{text: `目前任務：\n${JSON.stringify(task)}`}]
+          parts: [{
+            text: `${SYSTEM_PROMPT}\n\n目前任務：\n${JSON.stringify(task)}\n\n輸出必須符合以下 JSON Schema，且只能回傳純 JSON：\n${JSON.stringify(schema)}`
+          }]
         }],
         generationConfig: {
-          responseFormat: {
-            text: {
-              mimeType: "application/json",
-              schema
-            }
-          },
           temperature: 0.1
         }
       })
@@ -198,7 +191,8 @@ module.exports = async function handler(req, res) {
     if (!outputText) return res.status(502).json({error: "Gemini 沒有回傳翻譯內容"});
 
     try {
-      return res.status(200).json(JSON.parse(outputText));
+      const cleanJson = outputText.trim().replace(/^```json\s*/i, "").replace(/\s*```$/, "");
+      return res.status(200).json(JSON.parse(cleanJson));
     } catch {
       return res.status(502).json({error: "Gemini 回傳格式不正確"});
     }
