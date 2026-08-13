@@ -44,7 +44,7 @@ const RESPONSE_SCHEMAS = {
 };
 
 const LANGUAGES = {"zh-TW":{name:"繁體中文",speech:"zh-TW"},vi:{name:"越南文",speech:"vi-VN"},en:{name:"英文",speech:"en-US"}};
-const UI_LABELS={vi:{language:"（Chọn ngôn ngữ dịch）",start:"（Bắt đầu nói）",intent:"（AI nhận diện ý định người nói）",confirmHint:"（Xác nhận ý gốc）",translation:"（Bản dịch）",keywords:"（Từ ngữ quan trọng）",mic:"按下開始錄音",listening:"結束錄音並轉文字"},en:{language:"（Choose translation language）",start:"（Start speaking）",intent:"（AI identifies the speaker's intent）",confirmHint:"（Confirm original intent）",translation:"（Translation）",keywords:"（Key terms）",mic:"按下開始錄音",listening:"結束錄音並轉文字"},"zh-TW":{language:"（目標語言）",start:"（錄音）",intent:"（AI 理解）",confirmHint:"（確認原意）",translation:"（翻譯結果）",keywords:"（關鍵詞）",mic:"按下開始錄音",listening:"結束錄音並轉文字"}};
+const UI_LABELS={vi:{language:"（Chọn ngôn ngữ dịch）",start:"（Bắt đầu nói）",recognized:"（Văn bản nhận diện）",translation:"（Bản dịch）",keywords:"（Từ ngữ quan trọng）",mic:"按下開始錄音",listening:"結束錄音並轉文字"},en:{language:"（Choose translation language）",start:"（Start speaking）",recognized:"（Recognized text）",translation:"（Translation）",keywords:"（Key terms）",mic:"按下開始錄音",listening:"結束錄音並轉文字"},"zh-TW":{language:"（目標語言）",start:"（錄音）",recognized:"（辨識文字）",translation:"（翻譯結果）",keywords:"（關鍵詞）",mic:"按下開始錄音",listening:"結束錄音並轉文字"}};
 const $ = id => document.getElementById(id);
 const ui = Object.fromEntries(["sourceLanguage","targetLanguage","provider","statusBanner","inputPanel","textInput","micBtn","micLabel","permissionHelp","originalPanel","originalText","analysisPanel","understoodMeaning","mainIntent","tone","keywords","confidenceBar","confidenceText","uncertainBlock","uncertainParts","translationPanel","targetLanguageLabel","translationText","backTranslation","translatedKeywords","historyPanel","historyList"].map(id=>[id,$(id)]));
 let eventState = createEmptyEvent();
@@ -69,7 +69,7 @@ function init(){
   ui.provider.options[0].textContent=runtimeConfig.apiBaseUrl?"Gemini 3.5 Flash-Lite":"Gemini 測試介面";
   updateLocalizedLabels();setupSpeechRecognition();bindEvents();
 }
-function updateLocalizedLabels(){const labels=UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi;$("startLocalized").textContent=labels.start;$("intentLocalized").textContent=labels.intent;$("translationLocalized").textContent=labels.translation;$("keywordsLocalized").textContent=labels.keywords;if(!ui.micBtn.classList.contains("recording"))ui.micLabel.textContent=labels.mic;}
+function updateLocalizedLabels(){const labels=UI_LABELS[ui.targetLanguage.value]||UI_LABELS.vi;$("startLocalized").textContent=labels.start;$("recognizedLocalized").textContent=labels.recognized;$("translationLocalized").textContent=labels.translation;$("keywordsLocalized").textContent=labels.keywords;if(!ui.micBtn.classList.contains("recording"))ui.micLabel.textContent=labels.mic;}
 
 function bindEvents(){
   $("swapLanguages").onclick=()=>{};

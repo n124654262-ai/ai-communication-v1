@@ -37,8 +37,9 @@
 }
 
 .translation-section blockquote {
-  font-size: clamp(22px, 5.5vw, 28px);
-  font-weight: 750;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.65;
 }
 
 .context-keyword-list {
@@ -97,7 +98,7 @@ body { background: linear-gradient(180deg, var(--forest) 0 116px, var(--paper) 1
   select { padding-inline: 8px; }
   .app-header{align-items:center;padding-inline:12px}.eyebrow{font-size:8px;letter-spacing:.08em}.header-model,.header-language{width:calc(50% - 4px)}.header-model{gap:2px}.header-model label{grid-template-columns:1fr;gap:2px;font-size:10px}.header-model select{min-height:44px;font-size:14px}.header-model .model-status{display:none}.header-language{padding:7px}.header-language .language-single{grid-template-columns:1fr}.header-language .bilingual-title{font-size:10px}.header-language .bilingual-title small{display:none}.header-language select{min-height:44px;font-size:14px}.panel-title-row{display:block}
   .input-actions{gap:8px}.mic-btn,.submit-btn{padding-inline:8px;font-size:14px}
-  .analysis-section,.embedded-result{margin-top:12px;padding-top:12px}.output-section{padding:12px 0}.translation-section blockquote{font-size:20px}.communication-card{padding:14px}
+  .analysis-section,.embedded-result{margin-top:12px;padding-top:12px}.output-section{padding:12px 0}.translation-section blockquote{font-size:17px}.communication-card{padding:14px}
 }
 
 /* UI 設計階段不顯示正式版不需要的開發提示。 */
