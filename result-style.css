@@ -43,14 +43,17 @@
 
 .context-keyword-list {
   display: grid;
-  gap: 18px;
+  gap: 7px;
   margin: 0;
-  padding-left: 25px;
+  padding-left: 22px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
 }
 
-.context-keyword-list li { padding-left: 5px; line-height: 1.55; }
-.context-keyword-list strong { color: var(--forest); }
-.context-keyword-list p { margin: 7px 0 0; color: var(--muted); font-size: 15px; }
+.context-keyword-list li { padding-left: 2px; line-height: 1.4; }
+.context-keyword-list strong { color: var(--muted); font-weight: 400; }
+.context-keyword-list p { margin: 2px 0 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .context-keyword-list p strong { color: var(--ink); }
 
 /* 精簡模式：主畫面只保留溝通所需操作。 */
@@ -62,7 +65,7 @@ body { background: linear-gradient(180deg, var(--forest) 0 116px, var(--paper) 1
 .app-shell { padding-inline: 12px; }
 .card { border-radius: 18px; padding: 16px; margin-bottom: 10px; }
 .language-card { padding: 12px; }
-.language-single { display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,42%);align-items:center;gap:12px }.language-single select{min-height:50px}.bilingual-title small{display:inline;margin:0;color:var(--muted);font-size:.64em;font-weight:650;line-height:1.3}.language-card .bilingual-title small{font-size:11px}.auto-badge{display:inline-block;margin-right:5px;padding:3px 7px;border-radius:999px;background:#e5eee9;color:var(--forest);font-size:11px;font-weight:800}.panel-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title-row .simple-heading{flex:1}.inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mini-action{width:100%;min-height:48px;border:0;border-radius:11px;padding:8px 10px;font:800 15px inherit}.mini-action.confirm{background:var(--lime);color:var(--forest)}.mini-action.redo{background:#e7ece9;color:var(--forest)}.keywords-section{border-top:1px solid var(--line)}.keywords-section>h3{margin-bottom:16px;font-size:20px}
+.language-single { display:grid;grid-template-columns:minmax(0,1fr) minmax(145px,42%);align-items:center;gap:12px }.language-single select{min-height:50px}.bilingual-title small{display:inline;margin:0;color:var(--muted);font-size:.64em;font-weight:650;line-height:1.3}.language-card .bilingual-title small{font-size:11px}.auto-badge{display:inline-block;margin-right:5px;padding:3px 7px;border-radius:999px;background:#e5eee9;color:var(--forest);font-size:11px;font-weight:800}.panel-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.panel-title-row .simple-heading{flex:1}.inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.mini-action{width:100%;min-height:48px;border:0;border-radius:11px;padding:8px 10px;font:800 15px inherit}.mini-action.confirm{background:var(--lime);color:var(--forest)}.mini-action.redo{background:#e7ece9;color:var(--forest)}.keywords-section{border-top:1px solid var(--line);padding-top:12px!important;padding-bottom:8px!important}.keywords-section>h3{margin-bottom:8px;font-size:20px}.embedded-result>.button-stack{margin-top:8px}
 .language-grid { grid-template-columns: minmax(0, 1fr) 46px minmax(0, 1fr); }
 .language-grid select, .swap-btn { min-height: 48px; height: 48px; }
 .language-grid label { font-size: 12px; }
